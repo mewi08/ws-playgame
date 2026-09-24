@@ -19,6 +19,24 @@ function sendError(result, error){
     });
 };
 
+app.delete('/videojuegos/:id', async (require, result) => {
+    try{
+        const { id } = require.params;
+
+        const [res] = await db.query(
+            'DELETE FROM videojuegos WHERE id = ?', [id]
+        );
+
+        if(res.affectedRows == 0){
+            throw new Error('No encontrado');
+        }
+
+        sendSuccess(result, { mensaje: "Registro eliminado" });
+    }catch(error){
+        sendError(result, error);
+    }
+})
+
 db.getConnection((err) => {
     if(err) throw err;
     console.log('Conectado a la base de datos playgame');
